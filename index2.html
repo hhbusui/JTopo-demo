@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jtopo.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<title>实时监测拓扑图</title>
+	<style>
+		#canvas {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			position: absolute;
+			top: 0;
+			left: 0
+		}
+	</style>
+
+	<body id="body" onselectstart="javascript:return false;" style="overflow:-Scroll;overflow-x:hidden;overflow-y:hidden;">
+		<canvas width="910" height="400" id="canvas"></canvas>
+
+	</body>
+	<script type="text/javascript">
+		var canvas = document.getElementById('canvas'),
+			stage = new JTopo.Stage(canvas), // 创建一个舞台对象
+			scene = new JTopo.Scene(stage), // 创建一个场景对象
+			node = new JTopo.Node("Hello"); // 创建一个节点
+		node.setLocation(10, 20); // 设置节点坐标  
+		node.rotate = Math.random(); // 旋转角度
+		node.scaleX = Math.random(); // 水平方向的缩放
+		node.scaleY = Math.random(); // 垂直方向的缩放
+		node.alpha = Math.random(); // 透明度
+		node.setImage('img/gplot_up.png'); // 设置图片
+		node.fontColor = "0,0,0"; // 设置文字颜色
+		scene.add(node); // 放入到场景中
+		var nodeFrom = new JTopo.Node("from");
+		nodeFrom.setLocation(20, 20);
+		scene.add(nodeFrom);
+
+		var nodeTo = new JTopo.Node("To");
+		nodeTo.setLocation(800, 500);
+		scene.add(nodeTo);
+
+		addLink(nodeFrom,nodeTo,scene);
+		function addLink(nodeFrom,nodeTo,scene){
+			var link = new JTopo.Link(nodeFrom, nodeTo); // 增加连线
+			scene.add(link);
+		}
+		
+	</script>
+
+</html>

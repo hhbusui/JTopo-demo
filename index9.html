@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+		<title>拓扑图分组</title>
+	</head>
+
+	<body>
+		<canvas id="canvas"></canvas>
+		<script src="js/jtopo-min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var canvas = document.getElementById('canvas'),
+				stage = new JTopo.Stage(canvas);
+			//显示工具栏
+
+			var scene = new JTopo.Scene();
+//			scene.background = './img/bg.jpg';
+			stage.add(scene);
+		
+			canvas.setAttribute("width", window.innerWidth);
+			canvas.setAttribute("height", window.innerHeight);
+
+			// 不指定布局的时候，容器的布局为自动(容器边界随元素变化）
+//			var container = new JTopo.Container('边界自动变化');
+//			container.textPosition = 'Middle_Center';
+//			container.fontColor = '100,255,0';
+//			container.font = '18pt 微软雅黑';
+//			container.borderColor = '255,0,0';
+//			container.borderRadius = 30; // 圆角
+//			scene.add(container);
+
+//			for(var i = 0; i < 5; i++) {
+//				var node = new JTopo.Node("A_" + i);
+//				node.textPosition = "Middle_Center";
+//				node.setLocation(300 + Math.random() * 300, 200 + Math.random() * 200);
+//				scene.add(node);
+//				container.add(node);
+//			}
+//			
+//			
+//			
+//			scene.add(new JTopo.Link(container.childs[0], container.childs[1]));
+//			scene.add(new JTopo.Link(container.childs[2], container.childs[3]));
+//
+//			// 流式布局（水平、垂直间隔均为10)
+			var flowLayout = JTopo.layout.FlowLayout(10, 10);
+
+			// 网格布局(4行3列)
+			var gridLayout = JTopo.layout.GridLayout(10,20);
+
+			var container2 = new JTopo.Container('点击切换布局');
+			container2.layout = flowLayout;
+			container2.fillColor = '255,255,255';
+			container2.setBound(400, 0, 1100, 700);
+			container2.fontColor = '100,255,0';
+			container2.font = '18pt 微软雅黑';
+			container2.borderColor = '255,255,255';
+			container2.borderRadius = 30; // 圆角
+			scene.add(container2);
+
+			for(var i = 0; i < 50; i++) {
+				var node = new JTopo.Node("F_" + i);
+				node.textPosition = "Middle_Center";
+				scene.add(node);
+				
+				container2.add(node);
+				container2.layout = gridLayout;
+			
+				
+			}
+
+			
+			
+//			var container3 = new JTopo.Container('点击切换布局');
+//			container3.layout = flowLayout;
+//          container3.fillColor = '10,10,100';
+//			 container3.setBound(100, 100, 100, 200);
+//			 container3.dragable=false;
+//			 scene.add(container3);
+			
+			var node1 = new JTopo.Node("test");
+			node1.setBound(100, 200, 50, 100); // 同时设置大小及位置
+			scene.add(node1);
+			scene.add(node1);
+			
+			
+			var node2 = new JTopo.Node("test");
+			node2.setBound(50, 50, 50, 100); // 同时设置大小及位置
+			scene.add(node2);
+			scene.add(node2);
+			
+			newLink(node2,node1,"link");
+			
+			// 简单连线
+            function newLink(nodeA, nodeZ, text,dashedPattern){
+                var link = new JTopo.Link(nodeA, nodeZ, text);        
+                link.lineWidth = 3; // 线宽
+                link.bundleOffset = 60; // 折线拐角处的长度
+                link.bundleGap = 20; // 线条之间的间隔
+                link.textOffsetY = 3; // 文本偏移量（向下3个像素）
+                link.strokeColor = JTopo.util.randomColor(); // 线条颜色随机
+                link.dashedPattern = dashedPattern; 
+                scene.add(link);
+                return link;
+            }
+		</script>
+	</body>
+
+</html>

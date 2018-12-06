@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>拓扑图</title>
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+		<style type="text/css">
+			.shade {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				display: none;
+			}
+			
+			.wrap-ms-right {
+				list-style: none;
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding: 5px 0;
+				min-width: 80px;
+				margin: 0;
+				display: none;
+				font-family: "微软雅黑";
+				font-size: 14px;
+				background-color: #fff;
+				border: 1px solid rgba(0, 0, 0, .15);
+				box-sizing: border-box;
+				border-radius: 4px;
+				-webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+				-moz-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+				-ms-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+				-o-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+			}
+			
+			.ms-item {
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				cursor: pointer;
+			}
+			
+			.ms-item:hover {
+				background-color: #343a40;
+				color: #FFFFFF;
+			}
+			/*以西根据实际情况*/
+			
+			body {
+				width: 1200px;
+				height: 500px;
+				overflow: hidden;
+			}
+			
+			ul {
+				list-style-type: none;
+			}
+			
+			a {
+				text-decoration: none;
+			}
+			
+			.div1>ul>li {
+				float: left;
+				background-color: #009E94;
+				height: 50px;
+				line-height: 50px;
+				width: 100%;
+				margin: 10px 0px;
+			}
+			
+			.div1 a {
+				display: block
+			}
+			
+			#contextmenu {
+				border: 1px solid #aaa;
+				border-bottom: 0;
+				background: #eee;
+				position: absolute;
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				display: none;
+			}
+			
+			#contextmenu li a {
+				display: block;
+				padding: 10px;
+				border-bottom: 1px solid #aaa;
+				cursor: pointer;
+			}
+			
+			#contextmenu li a:hover {
+				background: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<canvas id="canvas" width="1500" height="700"></canvas>
+
+		<ul id="contextmenu" style="display:none;">
+			<li>
+				<a>顺时针旋转</a>
+			</li>
+			<li>
+				<a>逆时针旋转</a>
+			</li>
+			<li>
+				<a>更改颜色</a>
+			</li>
+			<li>
+				<a>放大</a>
+			</li>
+			<li>
+				<a>缩小</a>
+			</li>
+			<li>
+				<a>删除该节点</a>
+			</li>
+		</ul>
+		<script src="js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jtopo.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/mouseRight.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var canvas = document.getElementById('canvas'),
+					stage = new JTopo.Stage(canvas),
+					scene = new JTopo.Scene(stage);
+
+				scene.background = './img/bg.jpg';
+				var node1 = new JTopo.Node('主机');
+				node1.setLocation(550, 200);
+				node1.width = 100;
+				node1.height = 100;
+				node1.setImage('./img/1.png');
+				//文字的位置
+				node1.textPosition='Bottom_Center';
+				node1.textOffsetY = -5;
+				node1.font = '微软雅黑';
+				node1.borderRadius=10;
+				node1.borderWidth = 2;
+				node1.borderColor = '255,255,255';
+				node1.alpha = 0.8;
+				//是否显示选中的矩形
+				node1.showSelected = false;
+				
+				node1.shadow=true;
+				node1.draggable= false;
+				node1.fillColor='255,255,255';
+				
+				scene.add(node1);
+				
+				node1.alarm = 'Wa';
+				node1.alarmColor = '255,255,255';
+
+				var node2 = new JTopo.Node('受控端电脑1');
+				node2.setLocation(450, 100);
+				node2.width = 50;
+				node2.height = 50;
+				node2.setImage('img/computer.png');
+				scene.add(node2);
+
+				var node3 = new JTopo.Node('受控端电脑2');
+				node3.setLocation(650, 100);
+				node3.width = 50;
+				node3.height = 50;
+				node3.setImage('img/computer.png');
+				scene.add(node3);
+				
+				var node4 = new JTopo.Node();
+				node4.setLocation(685, 115);
+				node4.width = 10;
+				node4.height = 10;
+				node4.borderRadius=5;
+				node4.alarm='警告';
+				node4.backgroundColor='(230, 35, 35)';
+				
+				var link=new JTopo.FlexionalLink(node4,node3);
+				 link.direction = 'vertical';
+				scene.add(link);
+				
+				
+				var textNode = new JTopo.TextNode('This is a text node.');
+	            textNode.font = 'bold 16px 微软雅黑';
+	            textNode.setLocation(317, 250);
+	            textNode.editAble=true;
+	            scene.add(textNode);
+				
+
+				addLink(node1, node2, scene);
+				addLink(node1, node3, scene);
+
+				function addLink(nodeFrom, nodeTo, scene) {
+					var link = new JTopo.Link(nodeFrom, nodeTo); // 增加连线
+					link.strokeColor = '208, 208, 208';
+//					link.direction =  ;
+					//线条随机颜色
+					link.strokeColor = JTopo.util.randomColor();
+					link.lineWidth = 2;
+					//虚线间隔
+					link.dashedPattern = 5; 
+					//折线拐角处的长度
+					link.bundleOffset =50;
+					//线条之间的间隔
+					link.bundleGap = 20;
+					scene.add(link);
+				}
+
+				node1.mousedrag(function(event) {
+					console.log("主机拖拽拖拽");
+				});
+				//				node2.mousedown(function(event) {
+				//					if(event.button == 2) {
+				//						this.text = '按下右键';
+				//					} else if(event.button == 1) {
+				//						this.text = '按下中键';
+				//					} else if(event.button == 0) {
+				//						this.text = '按下左键';
+				//					}
+				//				});
+
+				var currentNode = null;
+
+				function handler(event) {
+					if(event.button == 2) { // 右键
+						// 当前位置弹出菜单（div）
+						$("#contextmenu").css({
+							top: event.pageY,
+							left: event.pageX
+						}).show();
+					}
+				}
+				node2.addEventListener('mouseup', function(event) {
+					currentNode = this;
+					handler(event);
+				});
+
+				stage.click(function(event) {
+					if(event.button == 0) { // 右键
+						// 关闭弹出菜单（div）
+						$("#contextmenu").hide();
+					}
+				});
+				$("#contextmenu a").click(function() {
+					var text = $(this).text();
+
+					if(text == '删除该节点') {
+						
+						scene.remove(currentNode);
+//						currentNode = null;
+						
+					}
+					if(text == '撤销上一次操作') {
+						currentNode.restore();
+					} else {
+						currentNode.save();
+							
+					}
+
+					if(text == '更改颜色') {
+						currentNode.fillColor = JTopo.util.randomColor();
+					} else if(text == '顺时针旋转') {
+						currentNode.rotate += 0.5;
+					} else if(text == '逆时针旋转') {
+						currentNode.rotate -= 0.5;
+					} else if(text == '放大') {
+						currentNode.scaleX += 0.2;
+						currentNode.scaleY += 0.2;
+					} else if(text == '缩小') {
+						currentNode.scaleX -= 0.2;
+						currentNode.scaleY -= 0.2;
+					}
+					
+					$("#contextmenu").hide();
+				});
+
+			});
+		
+			
+			
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>拓扑图</title>
+	
+</head>
+<body >
+	<canvas id = "canvas" width="1500" height="500" ></canvas>
+	
+	<script src="js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jtopo.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var canvas = document.getElementById('canvas'),
+				stage = new JTopo.Stage(canvas),
+				scene = new JTopo.Scene(stage);
+				/*node = new JTopo.Node('Hello');
+			
+				//设置背景图片
+//				scene.background='../img/bg.jpg';
+				
+				//设计节点
+				node.position=Math.random();
+				node.width=100;
+				node.height=100;
+//				node.rotate = Math.random(); // 旋转角度
+//				node.scaleX = Math.random(); // 水平方向的缩放
+//				node.scaleY = Math.random(); // 垂直方向的缩放
+//				node.alpha = Math.random(); // 透明度
+				node.fontColor = "0,0,0"; // 设置文字颜色
+				node.setImage('img/computer.png'); // 设置图片
+				
+				
+				scene.add(node);*/
+				var node1=addNode({
+					 
+					nodeName:"Hello",
+					nodePosition:'Top_Center',
+					nodeWidth:100,
+					nodeHeight:100,
+					nodeImg:'img/computer.png',
+					nodeFontColor:'#000',
+					scene:scene
+				});
+				
+				
+//				addNode({
+//					node:node2,
+//					nodeName:"Hello",
+//					nodePosition:'Left_Center',
+//					nodeWidth:100,
+//					nodeHeight:100,
+//					nodeImg:'img/computer.png',
+//					nodeFontColor:'#000',
+//					scene:scene,
+//				});
+//				addNode({
+//					node:node3,
+//					nodeName:"Hello",
+//					nodePosition:'Left',
+//					nodeWidth:100,
+//					nodeHeight:100,
+//					nodeImg:'img/computer.png',
+//					nodeFontColor:'#000',
+//					scene:scene,
+//				});
+				function addNode(obj){
+					var node = new JTopo.Node(obj.nodeName)
+					node.position=obj.nodePosition;
+					node.width=obj.nodeWidth;
+					node.height=obj.nodeHeight;
+					node.setImage(obj.nodeImg); // 设置图片
+					node.fontColor = obj.nodeFontColor; // 设置文字颜色
+					obj.scene.add(node);
+					return node;
+				}
+				
+//				var nodeFrom = new JTopo.Node("from");
+//				nodeFrom.setLocation(20, 20);
+//				scene.add(nodeFrom);
+//		
+//				var nodeTo = new JTopo.Node("To");
+//				nodeTo.setLocation(820, 500);
+//				scene.add(nodeTo);
+//				
+//				function nodeFrom(obj){
+//					
+//					
+//				}
+//				
+//				addLink(node1,node2,scene);
+//				function addLink(nodeFrom,nodeTo,scene){
+//					var link = new JTopo.Link(nodeFrom, nodeTo); // 增加连线
+//					scene.add(link);
+//				}			
+				
+			
+		});
+	</script>
+</body>
+
+</html>

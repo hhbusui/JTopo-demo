@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>拓扑图</title>
+		<link rel="stylesheet" type="text/css" href="css/index5.css" />
+		<style type="text/css">
+			#contextmenu {
+				position: absolute;
+				top: 100%;
+				left: 0;
+				z-index: 2;
+				display: none;
+				float: left;
+				min-width: 160px;
+				padding: 5px 0;
+				margin: 2px 0 0;
+				font-size: 14px;
+				text-align: left;
+				list-style: none;
+				background-color: #fff;
+				-webkit-background-clip: padding-box;
+				background-clip: padding-box;
+				border: 1px solid #ccc;
+				border: 1px solid rgba(0, 0, 0, .15);
+				border-radius: 4px;
+				-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+				box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+			}
+			
+			#contextmenu li {
+				display: list-item;
+				text-align: -webkit-match-parent;
+				cursor: pointer;
+			}
+			
+			#contextmenu li a {
+				display: block;
+				padding: 5px 20px;
+				clear: both;
+				font-weight: normal;
+				line-height: 1.42857143;
+				color: #333;
+				white-space: nowrap;
+				cursor: pointer;
+			}
+			
+			#contextmenu li:hover a {
+				background: #000;
+				background-color: #D9E0E7;
+			}
+			
+			.border-line {
+				border-bottom: 1px solid #333333;
+			}
+			
+			.shade {
+				position: absolute;
+				display: none;
+				border-style: solid;
+				white-space: nowrap;
+				z-index: 1;
+				transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1), top 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+				background-color: rgba(50, 50, 50, 0.7);
+				border-width: 0px;
+				border-color: rgb(51, 51, 51);
+				border-radius: 4px;
+				color: rgb(255, 255, 255);
+				font-style: normal;
+				font-variant: normal;
+				font-weight: normal;
+				font-stretch: normal;
+				font-size: 14px;
+				font-family: "Microsoft YaHei";
+				line-height: 21px;
+				padding: 5px;
+				/*left: 338px;
+		    top: 363px;*/
+			}
+			
+			.shade span {
+				display: inline-block;
+				margin-right: 5px;
+				border-radius: 10px;
+				width: 9px;
+				height: 9px;
+				background-color: rgb(121, 173, 56);
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--<div class="header">
+	
+	</div>
+	<div class="center">
+		<div class="left">
+			
+		</div>
+		<div class="right">
+		
+		</div>
+	</div>
+	<div class="footer">
+		
+	</div>-->
+		<canvas id="canvas" width="1400" height="700"></canvas>
+		<ul id="contextmenu" style="display:none;">
+			<li class="border-line">开机</li>
+			<li>关机</li>
+			<!--<li>
+				<a>顺时针旋转</a>
+			</li>
+			<li class="border-line">
+				<a>逆时针旋转</a>
+			</li>
+			<li class="border-line">
+				<a>更改颜色</a>
+			</li>
+			<li>
+				<a>放大</a>
+			</li>
+			<li>
+				<a>缩小</a>
+			</li class="border-line">
+			<li>
+				<a>删除该节点</a>
+			</li>
+			<li>
+				<a>撤销上一次操作</a>
+			</li>-->
+		</ul>
+		<div class="shade">
+			<span></span>你好元啊发大水法
+		</div>
+		<script src="js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jtopo-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/index5.js   " type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>

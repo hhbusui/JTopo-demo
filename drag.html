@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+		<style type="text/css">
+			.left {
+				width: 300px;
+				height: 500px;
+				float: left;
+				border: 1px solid #009E94;
+			}
+			
+			.right {
+				width: 500px;
+				height: 500px;
+				float: left;
+				border: 1px solid #2D353C;
+				margin-left: 100px;
+			}
+			
+			.drag1 {
+				width: 80px;
+				height: 80px;
+				background-color: #009E94;
+				display: block;
+			}
+			/*span如果直接设置宽高无效的原因：由于span的display默认属性是：inline；
+		 * 如果需要改变其宽高，就需要将其转变为块体元素（block）或行内块体元素（inle-block）：*/
+		
+		.box1{  
+                height: 200px;  
+                width: 600px;  
+                margin: 0  0 0 100px; 
+                float: left; 
+                border: 1px solid;
+                
+            }  
+            .box1 a{  
+                display: block;  
+                height: 50%;  
+                width: 50%;  
+               background-color: royalblue;
+            }  
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</style>
+	</head>
+
+	<body>
+		<div class="left">
+			<span draggable="true" class="drag1" id="test">
+			
+		</span>
+		</div>
+		<div class="right" id="target">
+
+		</div>
+		
+		
+		
+		
+		<!--
+        	作者：1530687053@qq.com
+        	时间：2018-03-28
+        	描述：在div中写click事件，默认是事件冒泡
+        	用addEventListener监听click 根据第三个参数（useCapture）true/false判断是冒泡还是捕获
+        	
+        -->
+		
+		<div id="div1" style="float: left;margin-left: 100px;width: 300px;height: 300px;border: 1px solid #333333;" >
+			<div id="div2" style="width: 150px;height: 150px;border: 1px solid #333333;" >
+				<div id="div3" style="width: 50px;height: 50px;border: 1px solid #CCCCCC;" >我是div</div>
+			</div>
+		</div>
+		
+		<div class="box1">  
+            <a href="http://ming5.top" target="_blank"></a>  
+        </div>  
+		<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+		    /*true表示捕获     false表示冒泡*/
+		   
+			/*document.getElementById("div1").addEventListener("click",a,true);
+			document.getElementById("div2").addEventListener("click",b,false);
+			document.getElementById("div3").addEventListener("click",c,true);*/
+			
+			
+			//注意此处的onclick为小写，且也为冒泡
+			document.getElementById("div1").onclick=a;
+			div2.onclick=b;
+			div3.onclick=c;
+			
+			
+			function a(e){
+				
+				console.log('我是div1');
+			}
+			
+			function b(e){
+				
+				console.log('我是div2');
+			}
+			
+			function c(e){
+				e.stopPropagation();  //阻止事件冒泡  执行当前
+				
+				
+				
+//                e.preventDefault();   //自身会执行  ，冒泡事件执行   会阻止默认事件 但是当前的事件会继续冒泡执行
+				return false;  //自身事件会被终止 继续冒泡   自身不执行 冒泡执行
+				console.log('我是div3');
+			
+			}
+		
+			 $(".box1").click(function(){  
+                console.log("1")//不阻止事件冒泡会打印1，页面跳转;               
+            });  
+             $(".box1 a").click(function(e){  
+                e.stopPropagation();  //阻止了冒泡，当前会执行
+			
+//				e.preventDefault();   //当前默认操作不执行 不能阻止冒泡 而且当前的事件会执行
+
+//			 	return false;        //什么都不执行了
+				console.log('a');
+                
+            });  
+            
+			
+			var timer, i = 0;
+			test.ondragstart = function() {
+				this.style.backgroundColor = 'lightgreen';
+				console.log('我开始拖动咯')
+			}
+			test.ondrag = function() {
+				if(timer) return;
+				timer = setInterval(function() {
+					test.innerHTML = i++;
+					
+				}, 100)
+//				console.log('一直在拖动我把')
+			}
+			test.ondragend = function() {
+				clearInterval(timer);
+				timer = 0;
+				this.style.backgroundColor = 'pink';
+				console.log('拖动完了吧')
+				
+			}
+			
+			
+			target.ondragenter = function(e){
+				e=e||event;
+				if(e.preventDefault()){
+					e.preventDefault();
+				}else{
+					e.returnValue = false;
+				}
+				console.log('有目标进入了')
+			}
+			target.ondragleave = function(e){
+				console.log('我从目标离开了')
+			}
+			target.ondragover =function(){
+				console.log('我在目标元素中拖动了');
+			}
+			target.ondrop = function(e){
+				e.preventDefault();
+				console.log('元素落在目标元素了')
+				test.appendChild(target);
+		
+			    this.style.backgroundColor = 'orange';   
+			}
+		</script>
+	</body>
+
+</html>

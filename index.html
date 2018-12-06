@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jtopo.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<title>实时监测拓扑图</title>
+	<style>
+		#canvas {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			position: absolute;
+			top: 0;
+			left: 0
+		}
+	</style>
+
+	<body id="body" onselectstart="javascript:return false;" style="overflow:-Scroll;overflow-x:hidden;overflow-y:hidden;">
+		<canvas id="canvas"></canvas>
+	</body>
+	<script type="text/javascript">
+		$(function() {
+			$("#canvas").attr("width", $("#body").width());
+			$("#canvas").attr("height", $(window).height());
+			var canvas = document.getElementById('canvas');
+			var stage = new JTopo.Stage(canvas); // 创建一个舞台对象
+			var scene = new JTopo.Scene(stage); // 创建一个场景对象
+			var up_img = "img/gplot_up.png";
+			var down_img = "img/gplot_down.png";
+			stage.wheelZoom = 1; //启动缩放，比例为0.85
+			scene.backgroundColor = "160,169,168"; //场景背景颜色
+			scene.alpha = 1;
+			var str="{\"data\":[{\"children\":[{\"children\":[{\"children\":[{\"cj\":3,\"id\":100000000008,\"main_mp_id\":100000000012,\"name\":\"固化炉房AP4电柜 1D2-1柜\",\"readNum\":0.02},{\"cj\":3,\"id\":100000000009,\"main_mp_id\":100000000012,\"name\":\"高压保护电源 1D1-3柜\",\"readNum\":9865.53},{\"cj\":3,\"id\":100000000010,\"main_mp_id\":100000000012,\"name\":\"固化炉房APT电柜 1D1-1柜\",\"readNum\":1749.65},{\"cj\":3,\"id\":100000000014,\"main_mp_id\":100000000012,\"name\":\"固化炉房AP5电柜 1D2-2柜\",\"readNum\":0},{\"cj\":3,\"id\":100000000018,\"main_mp_id\":100000000012,\"name\":\"旋转加硬AP8、9、10电柜 1D1-2柜\",\"readNum\":3739.46},{\"cj\":3,\"id\":100000000084,\"main_mp_id\":100000000012,\"name\":\"固化炉房AP6电柜 1D2-3柜\",\"readNum\":0}],\"cj\":2,\"id\":100000000012,\"main_mp_id\":321000000010,\"name\":\"1#专变进线 1D5柜\",\"readNum\":2074.44},{\"children\":[{\"cj\":3,\"id\":100000000001,\"main_mp_id\":100000000015,\"name\":\"4#空调机房AP13 2D6-1柜\",\"readNum\":4638.81},{\"cj\":3,\"id\":100000000002,\"main_mp_id\":100000000015,\"name\":\"低压配电室KZX电柜 2D5-4柜\",\"readNum\":8300.91},{\"cj\":3,\"id\":100000000003,\"main_mp_id\":100000000015,\"name\":\"空压机总电源 2D5-3柜\",\"readNum\":7554.29},{\"cj\":3,\"id\":100000000004,\"main_mp_id\":100000000015,\"name\":\"低压配电室SF1 2D5-2柜\",\"readNum\":1.24},{\"cj\":3,\"id\":100000000005,\"main_mp_id\":100000000015,\"name\":\"低压配电室应急照明ALE 2D6-5柜\",\"readNum\":2579.49},{\"cj\":3,\"id\":100000000006,\"main_mp_id\":100000000015,\"name\":\"冷水机室总电源 2D6-7柜\",\"readNum\":8378.01},{\"cj\":3,\"id\":100000000007,\"main_mp_id\":100000000015,\"name\":\"低压配电室消防主电SF1 2D6-6柜\",\"readNum\":6.49},{\"cj\":3,\"id\":100000000013,\"main_mp_id\":100000000015,\"name\":\"注塑车间AP1 2D4-4柜\",\"readNum\":18333.32},{\"cj\":3,\"id\":100000000016,\"main_mp_id\":100000000015,\"name\":\"模具清洗间AP3 2D4-2柜\",\"readNum\":16770.66},{\"cj\":3,\"id\":100000000017,\"main_mp_id\":100000000015,\"name\":\"模具清洗间AP2 2D4-3柜\",\"readNum\":15943.3},{\"cj\":3,\"id\":100000000021,\"main_mp_id\":100000000015,\"name\":\"纯水站 2D5-1柜\",\"readNum\":8144.78},{\"cj\":3,\"id\":100000000085,\"main_mp_id\":100000000015,\"name\":\"新建水站主电源 2D4-1柜\",\"readNum\":1282.78},{\"cj\":3,\"id\":100000000090,\"main_mp_id\":100000000015,\"name\":\"后固化炉AP11 2D6-2柜\",\"readNum\":6172.52},{\"cj\":3,\"id\":100000000093,\"main_mp_id\":100000000015,\"name\":\"低压配电室照明插座AL 2D6-4柜\",\"readNum\":10509.29},{\"cj\":3,\"id\":100000000094,\"main_mp_id\":100000000015,\"name\":\"包装车间AP12 2D6-3柜\",\"readNum\":4671.66}],\"cj\":2,\"id\":100000000015,\"main_mp_id\":321000000010,\"name\":\"2#专变进线 2D1柜\",\"readNum\":20584.06}],\"cj\":1,\"id\":321000000010,\"name\":\"高压 G1进线柜\",\"readNum\":883.03}],\"id\":0,\"name\":0}]}";
+			
+			var _data =JSON.parse(str).data;
+			var click_judge = true;
+			function addNode(text, data) { //添加节点
+				var node = new JTopo.Node(); // 创建一个节点
+				node.textPosition = "Top_Center";
+				node.textOffsetY = 45;
+				node.dragable = false;
+				var _text = "";
+				if(text.length >= 14) {
+					_text = text.substring(0, 14);
+					_text = _text + "..."
+				} else {
+					_text = text;
+				}
+				//微软雅黑&-30&0@微软雅黑&-30&20
+				node.text = _text;
+				node.fontColor = "51,51,51"; //字体颜色
+				node.fillColor = "75,148,125"; //节点背景
+				node.font = "16pt Bold"; //设置字体
+				if(data != undefined) {
+					node.setSize(300, 100);
+				} else {
+					node.setSize(300, 50);
+				}
+				node.showSelected = false;
+				//node.borderRadius = 10; // 圆角
+				scene.add(node);
+				if(data != undefined) {
+					setTimeout(function() {
+						var _node = new JTopo.Node(); // 创建一个节点
+						var _x = node.getLocation().x;
+						var _y = node.getLocation().y;
+						_node.textPosition = "Middle_Center";
+						_node.text = "电能示值：" + data.readNum;
+						_node.fontColor = "51,51,51"; //字体颜色
+						_node.fillColor = "255,255,255"; //节点背景
+						_node.font = "14pt Bold"; //设置字体
+						_node.setSize(300, 50);
+						_node.showSelected = false;
+						_node.dragable = false;
+						_node.setLocation(_x, _y + 50);
+						scene.add(_node);
+						setTimeout(function() {
+							var img_x = node.getLocation().x;
+							var img_y = node.getLocation().y;
+							var img_node = new JTopo.Node();
+							img_node.setImage(down_img, true);
+							img_node.setLocation(img_x + 124, img_y + 71);
+							img_node.showSelected = false;
+							img_node.shadow = true;
+							img_node.dragable = false;
+							img_node.zIndex = 999;
+							scene.add(img_node);
+							img_node.addEventListener("click", function() {
+								var _this = this;
+								var _node = new JTopo.Node(); // 创建一个节点
+								var _x = node.getLocation().x;
+								var _y = node.getLocation().y;
+								_node.textPosition = "Middle_Center";
+								_node.text = "A相电流：" + data.readNum;
+								_node.fontColor = "51,51,51"; //字体颜色
+								_node.fillColor = "255,255,255"; //节点背景
+								_node.font = "14pt Bold"; //设置字体
+								_node.setSize(300, 0);
+								_node.showSelected = false;
+								_node.visible = true;
+								_node.setLocation(_x, _y + 100);
+								_this.visible = false;
+								JTopo.Animate.stepByStep(_node, {
+									height: 50
+								}, 100, false).start();
+								scene.add(_node);
+								var up_node = new JTopo.Node(); // 创建一个节点
+								up_node.setImage(up_img, true);
+								up_node.setLocation(img_x + 124, img_y + 135);
+								up_node.showSelected = false;
+								up_node.shadow = true;
+								up_node.dragable = false;
+								up_node.zIndex = 999;
+								scene.add(up_node);
+								up_node.addEventListener("click", function() {
+									this.visible = false;
+									_this.visible = true;
+									function visible() {
+										setTimeout(function() {
+											_node.visible = false;
+										}, 100);
+										return false;
+									}
+									JTopo.Animate.stepByStep(_node, {
+										height: 0
+									}, 100, visible()).start();
+								});
+							})
+						}, 1)
+					}, 1)
+				}
+				return node;
+			}
+	
+			function addLink(nodeA, nodeZ) { //连线
+				var link = new JTopo.FoldLink(nodeA, nodeZ);
+				console.log(link);
+				link.strokeColor = '29,32,136';
+				link.lineWidth = 2;
+				scene.add(link);
+				return link;
+			}
+			for(var i = 0; i < _data.length; i++) {
+				var first = addNode("实时监测拓扑图"); //jtopo不能设置两个顶级节点（也许是我自己没找到解决方法）
+				if(_data[i].children != undefined) {
+					for(var j = 0; j < _data[i].children.length; j++) {
+						var second = addNode(_data[i].children[j].name, _data[i].children[j]);
+						addLink(first, second);
+						getnode(_data[i].children[j].children, second);
+					}
+				}
+			}
+			function getnode(elem, second) { //递归查找层级
+				if(elem != undefined) {
+					for(var n = 0; n < elem.length; n++) {
+						var third = addNode(elem[n].name, elem[n]);
+						addLink(second, third);
+						if(elem[n].children != undefined) {
+							getnode(elem[n].children, third);
+						}
+					}
+				}
+			}
+			scene.doLayout(JTopo.layout.TreeLayout('down', 350, 207));
+		});
+	</script>
+
+</html>
